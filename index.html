@@ -26,9 +26,9 @@
     document.head.appendChild(s);
   }
 
-  loadScript('https://urldefense.com/v3/__https://unpkg.com/react@18.2.0/umd/react.production.min.js__;!!JZRTRz1y!FhVhD5dfBSTZYC6goF20ThyBgEDgT7uv139kji_KUxj8Zz8XKnUZH5q2nWFCR291t5R1pyCpyB5cLJIvtakIe7qU-lc$ ', function() {
-    loadScript('https://urldefense.com/v3/__https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js__;!!JZRTRz1y!FhVhD5dfBSTZYC6goF20ThyBgEDgT7uv139kji_KUxj8Zz8XKnUZH5q2nWFCR291t5R1pyCpyB5cLJIvtakIRFnkWB0$ ', function() {
-      loadScript('https://urldefense.com/v3/__https://unpkg.com/@babel/standalone@7.23.2/babel.min.js__;!!JZRTRz1y!FhVhD5dfBSTZYC6goF20ThyBgEDgT7uv139kji_KUxj8Zz8XKnUZH5q2nWFCR291t5R1pyCpyB5cLJIvtakIJQrpWeA$ ', function() {
+  loadScript('https://urldefense.com/v3/__https://unpkg.com/react@18.2.0/umd/react.production.min.js__;!!JZRTRz1y!H48JxDsYMiJh5pyqOJHpFRV81yTeeS2g3TAVQoGITuHOMC8GH8ORsu4dZA126oa0iLhZrJklA5plDfJBzfYyJamJH1U$ ', function() {
+    loadScript('https://urldefense.com/v3/__https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js__;!!JZRTRz1y!H48JxDsYMiJh5pyqOJHpFRV81yTeeS2g3TAVQoGITuHOMC8GH8ORsu4dZA126oa0iLhZrJklA5plDfJBzfYyM2uhknk$ ', function() {
+      loadScript('https://urldefense.com/v3/__https://unpkg.com/@babel/standalone@7.23.2/babel.min.js__;!!JZRTRz1y!H48JxDsYMiJh5pyqOJHpFRV81yTeeS2g3TAVQoGITuHOMC8GH8ORsu4dZA126oa0iLhZrJklA5plDfJBzfYytk5QyC4$ ', function() {
         // All loaded — now compile and run the app
         var appCode = document.getElementById('app-source').textContent;
         try {
@@ -242,9 +242,11 @@ function PrizesPanel() {
       </div>
       <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
         {[
-          { n:"1", text:"The winner is the participant with the lowest aggregate score from their best 5 of 10 selected players." },
-          { n:"2", text:"In the event of a tie, the participant whose tiebreaker prediction is closest to the actual winning score at the US Open will be declared the winner." },
-          { n:"3", text:"Any player who misses the cut after Friday's second round will be assigned the score of the last-placed finisher for both Saturday and Sunday rounds." },
+          { n:"1", text:"Pick ten golfers, one from each bucket, as highlighted on the next page." },
+          { n:"2", text:"Pay your entry fee — €10 for one selection or €20 for three selections." },
+          { n:"3", text:"The winner is the participant with the lowest aggregate score from their best 5 of 10 selected players." },
+          { n:"4", text:"In the event of a tie, the participant whose tiebreaker prediction is closest to the actual winning score at the US Open will be declared the winner." },
+          { n:"5", text:"Any player who misses the cut after Friday's second round will be assigned the score of the last-placed finisher for both Saturday and Sunday rounds." },
         ].map(r => (
           <div key={r.n} style={{ display:"flex", gap:10, alignItems:"flex-start" }}>
             <span style={{ background:C.green, color:C.white, borderRadius:"50%", width:20, height:20, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, flexShrink:0, marginTop:1 }}>{r.n}</span>
@@ -390,7 +392,7 @@ function RevolutPayCard({ name, totalEntries }) {
         <strong style={{ color:C.purpleLight }}>{ref}</strong>
         <div style={{ color:"#4c1d95", fontSize:10, marginTop:2 }}>Include this so we can match your payment ✓</div>
       </div>
-      <a href={`https://urldefense.com/v3/__https://revolut.me/$*7BREVOLUT_ME*7D__;JSU!!JZRTRz1y!FhVhD5dfBSTZYC6goF20ThyBgEDgT7uv139kji_KUxj8Zz8XKnUZH5q2nWFCR291t5R1pyCpyB5cLJIvtakIAMt-9TM$ `} target="_blank" rel="noopener noreferrer"
+      <a href={`https://urldefense.com/v3/__https://revolut.me/$*7BREVOLUT_ME*7D__;JSU!!JZRTRz1y!H48JxDsYMiJh5pyqOJHpFRV81yTeeS2g3TAVQoGITuHOMC8GH8ORsu4dZA126oa0iLhZrJklA5plDfJBzfYyFp9bEsA$ `} target="_blank" rel="noopener noreferrer"
         style={{ display:"block", textAlign:"center", background:"linear-gradient(135deg,#7c3aed,#6d28d9)", color:C.white, borderRadius:8, padding:"12px 0", fontWeight:700, fontSize:14, textDecoration:"none" }}>
         Open Revolut → @{REVOLUT_ME}
       </a>
@@ -853,9 +855,11 @@ function Admin({ entries, setEntries }) {
         <div style={{ fontWeight:700, color:C.mutedLight, marginBottom:8 }}>Prizes & Rules</div>
         <ul style={{ margin:0, paddingLeft:16, lineHeight:2 }}>
           <li>Select one player from each of 10 buckets (10 picks total)</li>
-          <li><strong style={{ color:C.offWhite }}>Rule 1:</strong> Winner = lowest aggregate score from best 5 of 10 picks</li>
-          <li><strong style={{ color:C.offWhite }}>Rule 2:</strong> Ties decided by closest tiebreaker guess to the winning score vs par</li>
-          <li><strong style={{ color:C.offWhite }}>Rule 3:</strong> Players missing the cut receive the last-placed finisher's score for Sat & Sun</li>
+          <li><strong style={{ color:C.offWhite }}>Rule 1:</strong> Pick one golfer from each of the 10 buckets</li>
+          <li><strong style={{ color:C.offWhite }}>Rule 2:</strong> Pay €10 per entry or €20 for three entries</li>
+          <li><strong style={{ color:C.offWhite }}>Rule 3:</strong> Winner = lowest aggregate score from best 5 of 10 picks</li>
+          <li><strong style={{ color:C.offWhite }}>Rule 4:</strong> Ties decided by closest tiebreaker guess to the winning score vs par</li>
+          <li><strong style={{ color:C.offWhite }}>Rule 5:</strong> Players missing the cut receive the last-placed finisher's score for Sat & Sun</li>
           <li>€{PRICE_SINGLE} per entry · 3 entries for €{PRICE_BUNDLE}</li>
           <li>1st: €100 · 2nd: €50 · 3rd: €25</li>
           <li>⏰ Deadline: 11am Dublin Time, Thu 18 June 2026</li>
