@@ -8,18 +8,47 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #0a0a0a; font-family: Georgia, serif; color: #fff; }
     input, button, select, textarea { font-family: Georgia, serif; }
+    #loading { padding:60px; text-align:center; color:#119647; font-size:16px; }
   </style>
 </head>
 <body>
-  <div id="root"><div style="padding:40px;text-align:center;color:#119647;font-family:Georgia,serif;">Loading Swords Celtic Sweep...</div></div>
+  <div id="root"><div id="loading">⛳ Loading Swords Celtic Sweep 2026...<br><br><small style="color:#555">Please wait — loading resources</small></div></div>
 
-  <!-- React + ReactDOM from unpkg (more reliable than cdnjs for large files) -->
-  <script crossorigin src="https://urldefense.com/v3/__https://unpkg.com/react@18/umd/react.production.min.js__;!!JZRTRz1y!GF-wsIZI2SPXnbY6BI8p-ED1VnM6-SE9CnUTBmingJ0k9X9FjnwqqJyuRb2uEUp02ntT5hZ3jJ2gDqLnoEj-26x6x7k$ "></script>
-  <script crossorigin src="https://urldefense.com/v3/__https://unpkg.com/react-dom@18/umd/react-dom.production.min.js__;!!JZRTRz1y!GF-wsIZI2SPXnbY6BI8p-ED1VnM6-SE9CnUTBmingJ0k9X9FjnwqqJyuRb2uEUp02ntT5hZ3jJ2gDqLnoEj-vyf4ewQ$ "></script>
-  <!-- Babel standalone for JSX transformation -->
-  <script src="https://urldefense.com/v3/__https://unpkg.com/@babel/standalone@7.23.2/babel.min.js__;!!JZRTRz1y!GF-wsIZI2SPXnbY6BI8p-ED1VnM6-SE9CnUTBmingJ0k9X9FjnwqqJyuRb2uEUp02ntT5hZ3jJ2gDqLnoEj-7fG4AfU$ "></script>
+  <script>
+  // Load scripts sequentially to avoid race conditions
+  function loadScript(src, cb) {
+    var s = document.createElement('script');
+    s.src = src;
+    s.onload = cb;
+    s.onerror = function() {
+      document.getElementById('loading').innerHTML = '❌ Failed to load: ' + src + '<br>Please check your internet connection and refresh.';
+    };
+    document.head.appendChild(s);
+  }
 
-  <script type="text/babel" data-type="module">
+  loadScript('https://urldefense.com/v3/__https://unpkg.com/react@18.2.0/umd/react.production.min.js__;!!JZRTRz1y!FhVhD5dfBSTZYC6goF20ThyBgEDgT7uv139kji_KUxj8Zz8XKnUZH5q2nWFCR291t5R1pyCpyB5cLJIvtakIe7qU-lc$ ', function() {
+    loadScript('https://urldefense.com/v3/__https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js__;!!JZRTRz1y!FhVhD5dfBSTZYC6goF20ThyBgEDgT7uv139kji_KUxj8Zz8XKnUZH5q2nWFCR291t5R1pyCpyB5cLJIvtakIRFnkWB0$ ', function() {
+      loadScript('https://urldefense.com/v3/__https://unpkg.com/@babel/standalone@7.23.2/babel.min.js__;!!JZRTRz1y!FhVhD5dfBSTZYC6goF20ThyBgEDgT7uv139kji_KUxj8Zz8XKnUZH5q2nWFCR291t5R1pyCpyB5cLJIvtakIJQrpWeA$ ', function() {
+        // All loaded — now compile and run the app
+        var appCode = document.getElementById('app-source').textContent;
+        try {
+          var compiled = Babel.transform(appCode, {
+            presets: ['react'],
+            plugins: []
+          }).code;
+          var fn = new Function('React', 'ReactDOM', compiled + '\nreturn App;');
+          var App = fn(React, ReactDOM);
+          var root = ReactDOM.createRoot(document.getElementById('root'));
+          root.render(React.createElement(App));
+        } catch(err) {
+          document.getElementById('root').innerHTML = '<div style="padding:40px;color:#f87171;font-family:monospace;white-space:pre-wrap;">Error: ' + err.message + '</div>';
+        }
+      });
+    });
+  });
+  </script>
+
+  <script id="app-source" type="text/plain">
 const { useState, useEffect, useCallback } = React;
 
 
@@ -361,7 +390,7 @@ function RevolutPayCard({ name, totalEntries }) {
         <strong style={{ color:C.purpleLight }}>{ref}</strong>
         <div style={{ color:"#4c1d95", fontSize:10, marginTop:2 }}>Include this so we can match your payment ✓</div>
       </div>
-      <a href={`https://urldefense.com/v3/__https://revolut.me/$*7BREVOLUT_ME*7D__;JSU!!JZRTRz1y!GF-wsIZI2SPXnbY6BI8p-ED1VnM6-SE9CnUTBmingJ0k9X9FjnwqqJyuRb2uEUp02ntT5hZ3jJ2gDqLnoEj-mvYNhxw$ `} target="_blank" rel="noopener noreferrer"
+      <a href={`https://urldefense.com/v3/__https://revolut.me/$*7BREVOLUT_ME*7D__;JSU!!JZRTRz1y!FhVhD5dfBSTZYC6goF20ThyBgEDgT7uv139kji_KUxj8Zz8XKnUZH5q2nWFCR291t5R1pyCpyB5cLJIvtakIAMt-9TM$ `} target="_blank" rel="noopener noreferrer"
         style={{ display:"block", textAlign:"center", background:"linear-gradient(135deg,#7c3aed,#6d28d9)", color:C.white, borderRadius:8, padding:"12px 0", fontWeight:700, fontSize:14, textDecoration:"none" }}>
         Open Revolut → @{REVOLUT_ME}
       </a>
@@ -920,10 +949,6 @@ function App() {
   );
 }
 
-
-const container = document.getElementById('root');
-const root = ReactDOM.createRoot(container);
-root.render(React.createElement(App));
   </script>
 </body>
 </html>
