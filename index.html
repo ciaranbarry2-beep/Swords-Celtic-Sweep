@@ -242,11 +242,11 @@ function PrizesPanel() {
       </div>
       <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
         {[
-          { n:"1", text:"Pick ten golfers, one from each bucket, as highlighted on the next page." },
-          { n:"2", text:"Pay your entry fee — €10 for one selection or €20 for three selections." },
-          { n:"3", text:"The winner is the participant with the lowest aggregate score from their best 5 of 10 selected players." },
-          { n:"4", text:"In the event of a tie, the participant whose tiebreaker prediction is closest to the actual winning score at the US Open will be declared the winner." },
-          { n:"5", text:"Any player who misses the cut after Friday's second round will be assigned the score of the last-placed finisher for both Saturday and Sunday rounds." },
+          { n:"1", text:"Pick one golfer from each of the ten buckets (see next page)." },
+          { n:"2", text:"Pay your entry fee — EUR 10 for one selection or EUR 20 for three." },
+          { n:"3", text:"The winner has the lowest aggregate score from their best 5 of 10 players." },
+          { n:"4", text:"Ties are broken by the closest tiebreaker prediction to the actual US Open winning score." },
+          { n:"5", text:"Players missing the cut are assigned the last-placed finisher's score for Saturday and Sunday." },
         ].map(r => (
           <div key={r.n} style={{ display:"flex", gap:10, alignItems:"flex-start" }}>
             <span style={{ background:C.green, color:C.white, borderRadius:"50%", width:20, height:20, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, flexShrink:0, marginTop:1 }}>{r.n}</span>
