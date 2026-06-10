@@ -1,13 +1,13 @@
-
-  "rewrites": [
-    { "source": "/api/scores", "destination": "/api/scores.js" }
+{
+  "version": 2,
+  "builds": [
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "api/scores.js", "use": "@vercel/node" }
   ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" }
-      ]
-    }
+  "routes": [
+    { "src": "/api/scores", "dest": "/api/scores.js" },
+    { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
+
+  
