@@ -1,4 +1,4 @@
-{
+
   "rewrites": [
     { "source": "/api/scores", "destination": "/api/scores.js" }
   ],
@@ -11,4 +11,3 @@
     }
   ]
 }
-
