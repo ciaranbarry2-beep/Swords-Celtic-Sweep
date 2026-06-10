@@ -1,90 +1,13 @@
-// /api/scores.js — Vercel serverless function // Fetches live US Open leaderboard from ESPN's public golf API // Called every 2 minutes by the sweep app during the tournament
-
-export default async function handler(req, res) {
-  // Allow CORS for the sweep app
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Cache-Control", "s-maxage=120, stale-while-revalidate=60");
-
-  try {
-    // ESPN public golf API — US Open event ID for 2026
-    // This endpoint returns live leaderboard data during the tournament
-    const ESPN_URL =
-      "https://urldefense.com/v3/__https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?league=pga&event=401353338__;!!JZRTRz1y!Gd4wzNNQ9RuLEbhxr44yiHDMAPFguCx7s7lsS5rYa3O2FYqGcSx7ge4DrO1YbMvePcEfDFghGUUtgdBWHvnkrDamNnM$ ";
-
-    const response = await fetch(ESPN_URL, {
-      headers: {
-        "User-Agent": "Mozilla/5.0",
-        Accept: "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`ESPN API returned ${response.status}`);
+{
+  "rewrites": [
+    { "source": "/api/scores", "destination": "/api/scores.js" }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
     }
-
-    const data = await response.json();
-
-    // Parse the ESPN response into our name→score format
-    const scores = {};
-    let round = null;
-    let source = "live";
-
-    if (
-      data.events &&
-      data.events[0] &&
-      data.events[0].competitions &&
-      data.events[0].competitions[0]
-    ) {
-      const competition = data.events[0].competitions[0];
-      const competitors = competition.competitors || [];
-
-      // Get current round
-      const status = data.events[0].status;
-      if (status && status.period) round = status.period;
-
-      competitors.forEach((player) => {
-        const name = player.athlete && player.athlete.displayName;
-        const scoreStr =
-          player.score && player.score.displayValue;
-
-        if (name && scoreStr !== undefined) {
-          let score = 0;
-          if (scoreStr === "E" || scoreStr === "0") {
-            score = 0;
-          } else {
-            const parsed = parseInt(scoreStr.replace("+", ""), 10);
-            score = isNaN(parsed) ? 0 : parsed;
-          }
-          scores[name] = score;
-
-          // Also try to match last-name-only variants
-          const lastName = name.split(" ").slice(-1)[0];
-          if (lastName && lastName !== name) {
-            scores[`_alias_${lastName}`] = name;
-          }
-        }
-      });
-    }
-
-    // If no competitors found, ESPN might not have the event yet
-    if (Object.keys(scores).length === 0) {
-      return res.status(200).json({
-        scores: {},
-        source: "pending",
-        round: null,
-        message: "Tournament not yet started or ESPN data unavailable",
-      });
-    }
-
-    return res.status(200).json({ scores, source, round });
-  } catch (error) {
-    // Return empty so the app falls back to mock scores gracefully
-    return res.status(200).json({
-      scores: {},
-      source: "error",
-      round: null,
-      error: error.message,
-    });
-  }
+  ]
 }
-
