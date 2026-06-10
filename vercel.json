@@ -1,1 +1,14 @@
+{
+  "rewrites": [
+    { "source": "/api/scores", "destination": "/api/scores.js" }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" }
+      ]
+    }
+  ]
+}
 
