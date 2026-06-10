@@ -2,12 +2,11 @@
   "version": 2,
   "builds": [
     { "src": "index.html", "use": "@vercel/static" },
-    { "src": "api/scores.js", "use": "@vercel/node" }
+    { "src": "api/*.js", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/api/scores", "dest": "/api/scores.js" },
+    { "src": "/api/entries", "dest": "/api/entries.js" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
-
-  
