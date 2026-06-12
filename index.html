@@ -26,9 +26,9 @@
     document.head.appendChild(s);
   }
 
-  loadScript('https://urldefense.com/v3/__https://unpkg.com/react@18.2.0/umd/react.production.min.js__;!!JZRTRz1y!B5z3MIu57XKIknaVh2aeyx_sqdSuGkY2DUauovKFWcG-MldIBuaBV-f5bkKYRMcMVOrycSS4OqphccMgS0DYjCnuNO8$ ', function() {
-    loadScript('https://urldefense.com/v3/__https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js__;!!JZRTRz1y!B5z3MIu57XKIknaVh2aeyx_sqdSuGkY2DUauovKFWcG-MldIBuaBV-f5bkKYRMcMVOrycSS4OqphccMgS0DYmJf56jY$ ', function() {
-      loadScript('https://urldefense.com/v3/__https://unpkg.com/@babel/standalone@7.23.2/babel.min.js__;!!JZRTRz1y!B5z3MIu57XKIknaVh2aeyx_sqdSuGkY2DUauovKFWcG-MldIBuaBV-f5bkKYRMcMVOrycSS4OqphccMgS0DYXgA0_I8$ ', function() {
+  loadScript('https://unpkg.com/react@18.2.0/umd/react.production.min.js', function() {
+    loadScript('https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js', function() {
+      loadScript('https://unpkg.com/@babel/standalone@7.23.2/babel.min.js', function() {
         // All loaded — now compile and run the app
         var appCode = document.getElementById('app-source').textContent;
         try {
