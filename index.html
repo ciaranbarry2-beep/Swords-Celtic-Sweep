@@ -26,9 +26,9 @@
     document.head.appendChild(s);
   }
 
-  loadScript('https://urldefense.com/v3/__https://unpkg.com/react@18.2.0/umd/react.production.min.js__;!!JZRTRz1y!CuCBCmqIpjoLk6HhMeOw9NqmtxlSN4yI6Jp95ljTD6JLY44qG53VlKarG26Oa9GKLNf6-VtmyttEcnQNFDVHsWqKDto$ ', function() {
-    loadScript('https://urldefense.com/v3/__https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js__;!!JZRTRz1y!CuCBCmqIpjoLk6HhMeOw9NqmtxlSN4yI6Jp95ljTD6JLY44qG53VlKarG26Oa9GKLNf6-VtmyttEcnQNFDVH6vjHTNY$ ', function() {
-      loadScript('https://urldefense.com/v3/__https://unpkg.com/@babel/standalone@7.23.2/babel.min.js__;!!JZRTRz1y!CuCBCmqIpjoLk6HhMeOw9NqmtxlSN4yI6Jp95ljTD6JLY44qG53VlKarG26Oa9GKLNf6-VtmyttEcnQNFDVHVn8xf-Q$ ', function() {
+  loadScript('https://unpkg.com/react@18.2.0/umd/react.production.min.js', function() {
+    loadScript('https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js', function() {
+      loadScript('https://unpkg.com/@babel/standalone@7.23.2/babel.min.js', function() {
         // All loaded — now compile and run the app
         var appCode = document.getElementById('app-source').textContent;
         try {
@@ -998,7 +998,7 @@ function ContactUs() {
       const data = new FormData();
       data.append("name", name.trim());
       data.append("message", msg.trim());
-      const res = await fetch("https://urldefense.com/v3/__https://formspree.io/f/mbdezbrv__;!!JZRTRz1y!CuCBCmqIpjoLk6HhMeOw9NqmtxlSN4yI6Jp95ljTD6JLY44qG53VlKarG26Oa9GKLNf6-VtmyttEcnQNFDVH5xJ1GSM$ ", {
+      const res = await fetch("https://formspree.io/f/mbdezbrv", {
         method: "POST",
         body: data,
         headers: { "Accept": "application/json" },
