@@ -302,9 +302,9 @@ function PrizesPanel() {
           { n:"2", text:"Pay your entry fee — €10 for one selection or €20 for three." },
           { n:"3", text:"The winner has the lowest aggregate score from their best 5 of 10 players." },
           { n:"4", text:"Ties are broken by the closest tiebreaker prediction to the actual US Open winning score." },
-          { n:"5", text:"If a player does not start (DNS) the tournament due to injury, illness or any other reason, all participants who selected that player will have them replaced by a randomly assigned alternate from the same bucket. This replacement will be applied uniformly to all affected entries and announced via WhatsApp." },
+          { n:"5", text:"If a player does not start (DNS) the tournament due to injury, illness or any other reason, all participants who selected that player will have them replaced by a randomly assigned alternate from the same bucket. This replacement will be applied uniformly." },
           { n:"6", text:"Players missing the cut are assigned the last-placed finisher's score for Saturday and Sunday." },
-          { n:"7", text:"If a player withdraws (WD) from the tournament after completing at least one hole of competitive play, that is considered part of the game. No replacement is made — the player's score at the point of withdrawal carries forward using the missed-cut rule (Rule 6)." },
+          { n:"7", text:"If a player withdraws (WD) from the tournament after teeing off, that is considered part of the game. No replacement is made — the player's score at the point of withdrawal carries forward using the missed-cut rule (Rule 6)." },
         ].map(r => (
           <div key={r.n} style={{ display:"flex", gap:10, alignItems:"flex-start" }}>
             <span style={{ background:C.green, color:C.white, borderRadius:"50%", width:20, height:20, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:700, flexShrink:0, marginTop:1 }}>{r.n}</span>
