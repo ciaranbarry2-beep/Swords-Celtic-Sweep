@@ -118,7 +118,7 @@ const BUCKETS = [
     players:["Árni Sveinsson (a)","Charlie Woods (a)","Soren Kjeldsen","Richard Mansell","Jens Dantorp","Filippo Celli","Guido Migliozzi","Anders Albertsen","Jesper Svensson","Matthew Riedel (a)"] },
 ];
 
-const SCORE_OPTIONS = Array.from({ length: 26 }, (_, i) => i - 20);
+const SCORE_OPTIONS = Array.from({ length: 31 }, (_, i) => i - 20);
 
 const PRIZES = [
   { pos:1, icon:"🥇", label:"1st Place", color:C.gold,   prize:"20% of pot" },
@@ -395,6 +395,7 @@ function Nav({ view, setView, isAdmin }) {
     { id:"leaderboard", label:"Leaderboard" },
     { id:"players", label:"Player Scores" },
     { id:"ourteam", label:"Our Team" },
+    { id:"contact", label:"Contact Us" },
     ...(isAdmin?[{ id:"admin", label:"⚙ Admin" }]:[]),
   ];
   return (
@@ -982,6 +983,89 @@ function OurTeam() {
   );
 }
 
+// ─── CONTACT US ───────────────────────────────────────────────────────────────
+function ContactUs() {
+  const [status, setStatus]   = useState("idle"); // idle | sending | sent | error
+  const [name, setName]       = useState("");
+  const [email, setEmail]     = useState("");
+  const [message, setMessage] = useState("");
+  const [errMsg, setErrMsg]   = useState("");
+
+  const inputStyle = {
+    width:"100%", padding:"11px 13px", borderRadius:8,
+    background:C.black, border:`1px solid ${C.border}`,
+    color:C.white, fontSize:14, outline:"none", fontFamily:"inherit",
+  };
+
+  const handleSubmit = async () => {
+    if (!name.trim() || !email.trim() || !message.trim()) {
+      setErrMsg("Please fill in all fields.");
+      setStatus("error");
+      return;
+    }
+    setStatus("sending");
+    setErrMsg("");
+    try {
+      const res = await fetch("https://formspree.io/f/mbdezbrv", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({ name, email, message }),
+      });
+      if (res.ok) {
+        setStatus("sent");
+        setName(""); setEmail(""); setMessage("");
+      } else {
+        setErrMsg("Something went wrong sending your message. Please try again.");
+        setStatus("error");
+      }
+    } catch(e) {
+      setErrMsg("Network error — please check your connection and try again.");
+      setStatus("error");
+    }
+  };
+
+  return (
+    <div style={{ padding:16, maxWidth:560, margin:"0 auto" }}>
+      <h2 style={{ color:C.white, margin:"0 0 4px", fontSize:18 }}>Contact Us</h2>
+      <div style={{ color:C.muted, fontSize:12, marginBottom:16 }}>Questions about the sweep? Send us a message below.</div>
+
+      {status === "sent" ? (
+        <div style={{ background:`${C.green}18`, border:`1px solid ${C.green}`, borderRadius:10, padding:"16px 14px", color:C.offWhite }}>
+          <div style={{ color:C.green, fontWeight:700, fontSize:14, marginBottom:4 }}>✅ Message sent!</div>
+          <div style={{ fontSize:13, lineHeight:1.6 }}>Thanks for getting in touch — we'll get back to you as soon as we can.</div>
+          <button onClick={()=>setStatus("idle")} style={{
+            marginTop:12, background:"none", border:`1px solid ${C.green}66`, color:C.green,
+            borderRadius:6, padding:"6px 12px", fontSize:12, cursor:"pointer", fontFamily:"inherit",
+          }}>Send another message</button>
+        </div>
+      ) : (
+        <div style={{ background:C.blackCard, border:`1px solid ${C.border}`, borderRadius:12, padding:16, display:"flex", flexDirection:"column", gap:12 }}>
+          <div>
+            <label style={{ display:"block", color:C.mutedLight, fontSize:12, marginBottom:5 }}>Your name</label>
+            <input type="text" value={name} onChange={e=>setName(e.target.value)} placeholder="e.g. Mary Murphy" style={inputStyle} />
+          </div>
+          <div>
+            <label style={{ display:"block", color:C.mutedLight, fontSize:12, marginBottom:5 }}>Your email</label>
+            <input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="so we can reply to you" style={inputStyle} />
+          </div>
+          <div>
+            <label style={{ display:"block", color:C.mutedLight, fontSize:12, marginBottom:5 }}>Your message</label>
+            <textarea value={message} onChange={e=>setMessage(e.target.value)} rows={5} placeholder="How can we help?" style={{ ...inputStyle, resize:"vertical", lineHeight:1.5 }} />
+          </div>
+          {status === "error" && (
+            <div style={{ color:C.red, fontSize:13 }}>{errMsg}</div>
+          )}
+          <button onClick={handleSubmit} disabled={status==="sending"} style={{
+            background:C.green, color:C.white, border:"none", borderRadius:8,
+            padding:"12px 16px", fontSize:15, fontWeight:700, fontFamily:"inherit",
+            cursor: status==="sending" ? "default" : "pointer", opacity: status==="sending" ? 0.7 : 1,
+          }}>{status==="sending" ? "Sending…" : "Send Message"}</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── ADMIN ────────────────────────────────────────────────────────────────────
 function Admin({ entries, setEntries }) {
   async function remove(id) {
@@ -1198,6 +1282,7 @@ function App() {
               {view==="leaderboard" && <Leaderboard entries={entries} scores={scores} />}
               {view==="players"     && <PlayerScores scores={scores} />}
               {view==="ourteam"     && <OurTeam />}
+              {view==="contact"     && <ContactUs />}
               {view==="admin"&&isAdmin && <Admin entries={entries} setEntries={setEntries} />}
             </>
       }
