@@ -61,10 +61,11 @@ const PRICE_BUNDLE = 20;   // 3 entries for €20
 const DEADLINE     = new Date("2026-06-18T11:00:00+01:00"); // 11am Dublin time
 
 // Players who miss the cut are assigned the score of the last-placed finisher.
-// This set is populated by the admin via live data; for now it's empty (pre-tournament).
-// Usage: missedCut.add("Player Name") when they miss the cut after Friday.
+// Auto-populated from the /api/scores `cut` array on each refresh (see refreshScores).
+// Still a plain Set so effectiveScore() and the leaderboard can read it synchronously.
+// Admins can also add names manually for edge cases via missedCut.add("Player Name").
 const missedCut = new Set([
-  // e.g. "Jon Rahm", "Tony Finau"  ← populated during tournament
+  // Populated automatically during the tournament from ESPN cut data.
 ]);
 
 // ─── SWORDS CELTIC COLOURS (green + black) ────────────────────────────────────
@@ -144,7 +145,13 @@ async function fetchLiveScores() {
     if (!res.ok) throw new Error("API error");
     const data = await res.json();
     if (data && data.scores && Object.keys(data.scores).length > 0) {
-      return { scores: data.scores, source: data.source || "live", round: data.round };
+      return {
+        scores: data.scores,
+        source: data.source || "live",
+        round: data.round,
+        cut: Array.isArray(data.cut) ? data.cut : [],
+        withdrawn: Array.isArray(data.withdrawn) ? data.withdrawn : [],
+      };
     }
     return null;
   } catch(e) {
@@ -1219,6 +1226,10 @@ function App() {
   const refreshScores = useCallback(async () => {
     const live = await fetchLiveScores();
     if (live) {
+      // Auto-apply the cut: add any newly-cut or withdrawn players to missedCut.
+      // (We only add, never clear, so manual admin additions are preserved.)
+      (live.cut || []).forEach(name => missedCut.add(name));
+      (live.withdrawn || []).forEach(name => missedCut.add(name));
       setScores(live.scores);
       setScoreSource(live.source);
       setCurrentRound(live.round || null);
