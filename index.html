@@ -98,26 +98,31 @@ const C = {
 // ─── 100 PLAYERS IN 10 BUCKETS OF 10 ─────────────────────────────────────────
 const BUCKETS = [
   { id:1,  label:"Bucket 1",  tier:"Elite Favourites",
-    players:["Scottie Scheffler","Rory McIlroy","Jon Rahm","Xander Schauffele","Cameron Young","Tommy Fleetwood","Bryson DeChambeau","Ludvig Aberg","Viktor Hovland","Russell Henley"] },
+    players:["Scottie Scheffler","Rory McIlroy","Jon Rahm","Xander Schauffele","Cameron Young","Tommy Fleetwood","Bryson DeChambeau","Ludvig Åberg","Viktor Hovland","Russell Henley"] },
   { id:2,  label:"Bucket 2",  tier:"Top Contenders",
     players:["Collin Morikawa","Justin Thomas","Shane Lowry","Hideki Matsuyama","Tyrrell Hatton","Patrick Cantlay","Sam Burns","Ben Griffin","Robert MacIntyre","Justin Rose"] },
   { id:3,  label:"Bucket 3",  tier:"Strong Challengers",
     players:["Matt Fitzpatrick","Brooks Koepka","Keegan Bradley","J.J. Spaun","Sepp Straka","Aaron Rai","Maverick McNealy","Corey Conners","Chris Gotterup","Akshay Bhatia"] },
   { id:4,  label:"Bucket 4",  tier:"Dark Horses",
-    players:["Harris English","Sungjae Im","Min Woo Lee","Jacob Bridgeman","Nick Taylor","Andrew Novak","Si Woo Kim","Kurt Kitayama","Nicolai Hojgaard","Patrick Reed"] },
+    players:["Harris English","Sungjae Im","Min Woo Lee","Jacob Bridgeman","Nick Taylor","Andrew Novak","Si Woo Kim","Kurt Kitayama","Nicolai Højgaard","Patrick Reed"] },
   { id:5,  label:"Bucket 5",  tier:"Mid-Range Picks",
-    players:["Joaquin Niemann","Alex Noren","Harry Hall","Ryan Gerard","Rickie Fowler","Jake Knapp","Jason Day","Daniel Berger","Michael Kim","Gary Woodland"] },
+    players:["Joaquín Niemann","Alex Noren","Harry Hall","Ryan Gerard","Rickie Fowler","Jake Knapp","Jason Day","Daniel Berger","Michael Kim","Gary Woodland"] },
   { id:6,  label:"Bucket 6",  tier:"Value Plays",
-    players:["Adam Scott","Jordan Spieth","Alex Smalley","Marco Penge","Matt McCarty","Nicolas Echavarria","Samuel Stevens","Ryan Fox","Brian Harman","Pierceson Coody"] },
+    players:["Adam Scott","Jordan Spieth","Alex Smalley","Marco Penge","Matt McCarty","Nico Echavarria","Sam Stevens","Ryan Fox","Brian Harman","Pierceson Coody"] },
   { id:7,  label:"Bucket 7",  tier:"Sleeper Picks",
     players:["David Puig","Ryo Hisatsune","Michael Brennan","Kristoffer Reitan","Sahith Theegala","Patrick Rodgers","Alex Fitzpatrick","Matti Schmid","Lucas Herbert","Keith Mitchell"] },
   { id:8,  label:"Bucket 8",  tier:"Long Shots",
     players:["Davis Thompson","Taylor Montgomery","Billy Horschel","Tom Kim","Chris Kirk","Emiliano Grillo","Max Greyserman","Andrew Putnam","Nick Hardy","Caleb Surratt"] },
   { id:9,  label:"Bucket 9",  tier:"Big Outsiders",
-    players:["Peter Uihlein","Graeme McDowell","J.B. Holmes","Padraig Harrington","Zac Blair","Matthew Jordan","Niklas Norgaard","Angel Hidalgo","Carl Yuan","Dylan Wu"] },
+    players:["Peter Uihlein","Graeme McDowell","J.B. Holmes","Padraig Harrington","Zac Blair","Matthew Jordan","Niklas Nørgaard","Angel Hidalgo","Carl Yuan","Dylan Wu"] },
   { id:10, label:"Bucket 10", tier:"Qualifiers & Amateurs",
-    players:["Johnny Keefer","Brandon Wu","Cole Hammer","Neal Shipley","Ben Silverman","Jackson Koivun (a)","Mason Howell (a)","Miles Russell (a)","Ethan Fang (a)","Preston Stout (a)"] },
+    players:["Johnny Keefer","Brandon Wu","Cole Hammer","Neal Shipley","Ben Silverman","Jackson Koivun","Mason Howell","Miles Russell","Ethan Fang","Preston Stout"] },
 ];
+
+// Amateur players — names match ESPN exactly (no "(a)" suffix, which would break
+// score lookups). The "(a)" tag is appended at render time via amLabel() instead.
+const AMATEURS = new Set(["Jackson Koivun","Mason Howell","Miles Russell","Ethan Fang","Preston Stout"]);
+const amLabel = (p) => AMATEURS.has(p) ? p + " (a)" : p;
 
 const SCORE_OPTIONS = Array.from({ length: 31 }, (_, i) => i - 20);
 
@@ -440,7 +445,7 @@ function BucketSelector({ picks, onPick }) {
                 color:picks[b.id]===p?C.white:C.mutedLight,
                 cursor:"pointer", fontSize:13, fontWeight:picks[b.id]===p?700:400,
                 fontFamily:"inherit", transition:"all 0.12s",
-              }}>{p}</button>
+              }}>{amLabel(p)}</button>
             ))}
           </div>
         </div>
@@ -756,7 +761,7 @@ function EnterPicks({ entries, setEntries, scores }) {
               </div>
               {t.picks.map((p,i) => (
                 <div key={p} style={{ display:"flex", justifyContent:"space-between", padding:"4px 0", borderBottom:i<9?`1px solid ${C.border}`:"none", fontSize:12 }}>
-                  <span><span style={{ color:C.muted, fontSize:10, marginRight:6 }}>B{i+1}</span><span style={{ color:C.offWhite }}>{p}</span></span>
+                  <span><span style={{ color:C.muted, fontSize:10, marginRight:6 }}>B{i+1}</span><span style={{ color:C.offWhite }}>{amLabel(p)}</span></span>
                   <ScoreBadge score={scores[p]} />
                 </div>
               ))}
@@ -906,7 +911,7 @@ function PlayerScores({ scores }) {
         {all.map((p,i) => (
           <div key={p.name} style={{ display:"grid", gridTemplateColumns:"32px 1fr 40px 52px", gap:8, padding:"8px 12px", borderTop:`1px solid ${C.border}`, alignItems:"center" }}>
             <span style={{ color:C.muted, fontSize:12, fontFamily:"monospace" }}>{i+1}</span>
-            <span style={{ color:C.offWhite, fontSize:13 }}>{p.name}</span>
+            <span style={{ color:C.offWhite, fontSize:13 }}>{amLabel(p.name)}</span>
             <span style={{ color:C.muted, fontSize:11 }}>B{p.bucket}</span>
             <span style={{ textAlign:"right" }}><ScoreBadge score={p.score} /></span>
           </div>
