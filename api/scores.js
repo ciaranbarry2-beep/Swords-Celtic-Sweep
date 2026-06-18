@@ -6,7 +6,7 @@
 // 2026 US Open event ID (verify on ESPN before the tournament — see note below).
 // If this ID is wrong or returns no players, we automatically fall back to
 // whatever PGA event ESPN currently lists, which during US Open week is the US Open.
-const US_OPEN_EVENT_ID = "401353338";
+const US_OPEN_EVENT_ID = "401811952";
 
 const ESPN_BASE =
   "https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?league=pga";
