@@ -78,17 +78,38 @@ export default async function handler(req, res) {
         /(wd|withdraw|dq|disqualif)/i.test(String(st.displayValue || ""));
 
       // To-par score. ESPN uses "E" for even, "+5"/"-3" etc.
-      const scoreStr = player.score && player.score.displayValue;
-      let score = 0;
-      if (scoreStr !== undefined && scoreStr !== null) {
-        const s = String(scoreStr).trim();
-        if (s === "E" || s === "0") {
-          score = 0;
-        } else {
-          const parsed2 = parseInt(s.replace("+", ""), 10);
-          score = isNaN(parsed2) ? 0 : parsed2;
-        }
+      // Finished players carry a top-level player.score; mid-round players do
+      // NOT — their live to-par only lives in the statistics[] scoreToPar entry
+      // (and in the current round's linescores). Read those first so in-progress
+      // players don't silently fall back to 0.
+      const parseToPar = (raw) => {
+        if (raw === undefined || raw === null) return undefined;
+        if (typeof raw === "number") return raw;
+        const s = String(raw).trim();
+        if (s === "" || s === "-" || s === "--") return undefined;
+        if (s === "E" || s === "e") return 0;
+        const n = parseInt(s.replace("+", ""), 10);
+        return isNaN(n) ? undefined : n;
+      };
+
+      // 1) statistics[].scoreToPar — present for both in-progress and finished
+      let score;
+      const stats = Array.isArray(player.statistics) ? player.statistics : [];
+      const sToPar = stats.find((x) => x && x.name === "scoreToPar");
+      if (sToPar) {
+        score = parseToPar(sToPar.value !== undefined ? sToPar.value : sToPar.displayValue);
       }
+      // 2) top-level score.displayValue (finished players)
+      if (score === undefined && player.score) {
+        score = parseToPar(player.score.displayValue !== undefined ? player.score.displayValue : player.score.value);
+      }
+      // 3) current round's linescore (period matching the active round)
+      if (score === undefined && Array.isArray(player.linescores)) {
+        const ls = player.linescores.find((l) => l && (round ? l.period === round : true) && l.displayValue);
+        if (ls) score = parseToPar(ls.displayValue);
+      }
+      // 4) give up -> treat as even
+      if (score === undefined) score = 0;
 
       scores[name] = score;
       if (isCut) cut.push(name);
