@@ -820,7 +820,11 @@ function EnterPicks({ entries, setEntries, scores }) {
 
 // ─── LEADERBOARD ──────────────────────────────────────────────────────────────
 function Leaderboard({ entries, scores }) {
-  const WINNING_SCORE = -5;
+  // Provisional winning score = current lowest (best) score in the live field.
+  // This tracks the real leader as play unfolds rather than a fixed value, and
+  // becomes the actual winning score once the tournament finishes on Sunday.
+  const liveScores = Object.values(scores).filter(v => typeof v === "number");
+  const WINNING_SCORE = liveScores.length ? Math.min(...liveScores) : 0;
   const ranked = entries
     .map(e => ({
       ...e,
@@ -843,7 +847,7 @@ function Leaderboard({ entries, scores }) {
         <h2 style={{ color:C.white, margin:0, fontSize:18 }}>Leaderboard</h2>
         <GreenPill>{ranked.length} Entries</GreenPill>
       </div>
-      <div style={{ color:C.muted, fontSize:11, marginBottom:10 }}>Best 5 of your 10 picks · Lowest score wins · Missed-cut players receive last-place score · Ties decided by tiebreaker</div>
+      <div style={{ color:C.muted, fontSize:11, marginBottom:10 }}>Best 5 of your 10 picks · Lowest score wins · Missed-cut players receive last-place score · Ties decided by tiebreaker (vs current leader {fmt(WINNING_SCORE)}, provisional until Sunday)</div>
 
       <div style={{ display:"flex", gap:5, marginBottom:12 }}>
         {PRIZES.map(p => (
