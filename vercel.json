@@ -2,11 +2,13 @@
   "version": 2,
   "builds": [
     { "src": "index.html", "use": "@vercel/static" },
+    { "src": "photos/**", "use": "@vercel/static" },
     { "src": "api/*.js", "use": "@vercel/node" }
   ],
   "routes": [
     { "src": "/api/scores", "dest": "/api/scores.js" },
     { "src": "/api/entries", "dest": "/api/entries.js" },
+    { "src": "/photos/(.*)", "dest": "/photos/$1" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
